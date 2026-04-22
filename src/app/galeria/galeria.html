@@ -1,0 +1,48 @@
+<div class="root">
+
+  <header class="header">
+    <h1 class="titulo">Galería de Gatos 🐱</h1>
+    <p class="total-likes">{{ fotos.length }} fotos · {{ totalLikes }} likes totales 🐱</p>
+  </header>
+
+  <main class="grid" *ngIf="fotos.length > 0; else vacia">
+    <div class="card" *ngFor="let foto of fotos">
+      <img [src]="foto.url" [alt]="foto.titulo" class="img" />
+      <div class="card-footer">
+        <span class="foto-titulo">{{ foto.titulo }}</span>
+        <div class="botones">
+          <button class="like-btn" (click)="darLike(foto)">
+            {{ foto.likes > 0 ? '🐱' : '😿' }} {{ foto.likes }}
+          </button>
+          <button class="delete-btn" (click)="eliminarFoto(foto.id)">🗑️</button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <ng-template #vacia>
+    <div class="vacia">
+      <span class="vacia-icono">😿</span>
+      <p class="vacia-texto">No hay fotos en la galería.</p>
+      <p class="vacia-sub">¡Agrega una usando el formulario!</p>
+    </div>
+  </ng-template>
+
+  <!-- Botón flotante -->
+  <button class="fab" (click)="mostrarFormulario = !mostrarFormulario">
+    {{ mostrarFormulario ? '✕' : '+' }}
+  </button>
+
+  <div class="modal-overlay" *ngIf="mostrarFormulario" (click)="mostrarFormulario = false">
+    <div class="modal" (click)="$event.stopPropagation()">
+      <h2 class="form-titulo">Agregar foto</h2>
+      <div class="form-col">
+        <input class="input" type="text" placeholder="URL de la imagen" [(ngModel)]="nuevaUrl" (keyup.enter)="agregarFoto()" />
+        <input class="input" type="text" placeholder="Título" [(ngModel)]="nuevoTitulo" (keyup.enter)="agregarFoto()" />
+        <button class="agregar-btn" (click)="agregarFoto()">Agregar</button>
+      </div>
+      <p class="error" *ngIf="error">{{ error }}</p>
+    </div>
+  </div>
+
+</div>
